@@ -54,8 +54,8 @@ function esConfirmado() public returns (uint) {
     return tutoriasData[msg.sender].num_confirmar;
         
     }
-function estaConfirmado() public returns (address){ //falta esta confirmado
-    
+function estaCancelado(address key) public returns (uint){ 
+    return tutoriasData[key].num_cancelar;
     }
     
 }
