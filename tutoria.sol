@@ -5,8 +5,9 @@ contract Tutoria {
 address idProfesor;
 string materia;
 address alumno;
+uint num_confirmar = 1;
     
-constructor (string mater, address idProf) public{
+function pedir (string mater, address idProf) public{
         materia = mater;
         idProfesor = idProf;
         alumno = msg.sender;
@@ -24,7 +25,7 @@ function getAlumno() public returns (address) {
         return alumno;
     }
 function confirmar() public returns (uint) {
-        return 0;
+        return num_confirmar;
     }
 function cancelar() public returns (address) {
         
