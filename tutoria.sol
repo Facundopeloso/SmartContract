@@ -10,6 +10,8 @@ constructor (string mater, address idProf) public{
         materia = mater;
         idProfesor = idProf;
         alumno = msg.sender;
+        require (alumno != idProf);
+
     }
 function getMateria() public returns (string) {
         return materia;
