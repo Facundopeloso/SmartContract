@@ -8,6 +8,7 @@ string materia;
 address alumno;
 uint num_confirmar;
 uint num_cancelar;
+bytes32 hash;
 }
 
 mapping(address => tutoriaData) tutoriasData;
@@ -19,43 +20,48 @@ function pedir (string mater, address Id_profsor) public{
     t.alumno = msg.sender;
     require (msg.sender != Id_profsor);  
     tutoriaData t = tutoriasData [msg.sender];
-   
+    t.hash = keccak256(t.alumno, t.materia, t.idProfesor, t.num_confirmar, t.num_cancelar);
+    t.num_cancelar = 0;
+    t.num_confirmar = 0;
     }
     
     
      
-function getMateria() public returns (string) {
-    return tutoriasData[msg.sender].materia;
+function getMateria(address key) public returns (string) {
+    return tutoriasData[key].materia;
     }
     
-function getIdProfesor() public returns (address) {
-    return tutoriasData[msg.sender].idProfesor ;
+function getIdProfesor(address key) public  returns (address) {
+    return tutoriasData[key].idProfesor ;
 }
 
-function getAlumno() public returns (address) {
-    return  tutoriasData[msg.sender].alumno;
+function getAlumno(address key) public returns (address) {
+    return  tutoriasData[key].alumno;
     
     }
     
-function confirmar() public returns (uint) {
-    require(tutoriasData[msg.sender].num_confirmar == 0);
-    require(tutoriasData[msg.sender].idProfesor == msg.sender);
-    return tutoriasData[msg.sender].num_confirmar = 0;
+function confirmar(address key) public view returns (uint) {
+    require(tutoriasData[key].num_confirmar == 0);
+    require (tutoriasData[key].num_cancelar == 0); 
+    require(tutoriasData[key].idProfesor == msg.sender);
+    return tutoriasData[key].num_confirmar = 1;
         
     }
-function cancelar() public returns (uint) { 
-   require (tutoriasData[msg.sender].alumno == msg.sender);
-    require (tutoriasData[msg.sender].num_confirmar == 0);
-    require (tutoriasData[msg.sender].num_cancelar == 1);   
-    return tutoriasData[msg.sender].num_cancelar = 1;
+function cancelar(address key) public view returns (uint) { 
+   require (tutoriasData[key].alumno == msg.sender);
+    require (tutoriasData[key].num_confirmar == 0);
+    require (tutoriasData[key].num_cancelar == 0);   
+    return tutoriasData[key].num_cancelar = 1;
     }
     
-function esConfirmado() public returns (uint) { 
-    return tutoriasData[msg.sender].num_confirmar;
+function esConfirmado(address key) public view returns (uint) { 
+    return tutoriasData[key].num_confirmar;
         
     }
-function estaCancelado(address key) public returns (uint){ 
+function estaCancelado(address key) public view returns (uint){ 
     return tutoriasData[key].num_cancelar;
     }
-    
+function getHash(address key) public view returns (bytes32) {
+   return tutoriasData[key].hash;
+    }
 }
